@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.framework.qual.Unused;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +75,7 @@ public class SafetyblanketEvents implements Listener {
     }
 
     /**
-     * Decrease falldamage by 35% if the falldamage isn't too high for players under blanket
+     * Decrease fall damage by 35% if the fall damage isn't too high for players under blanket
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageEvent(@NotNull EntityDamageEvent event) {
@@ -145,6 +144,8 @@ public class SafetyblanketEvents implements Listener {
      * Cover player in blanket
      */
     private void addSafetyBlanket(@NotNull Player player) {
+        Safetyblanket.blankets++;
+
         new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS));
         player.getPersistentDataContainer().set(Safetyblanket.HAS_NEW_PLAYER_EFFECTS, PersistentDataType.SHORT, (short) 1);
         if(!player.hasPlayedBefore()) {
