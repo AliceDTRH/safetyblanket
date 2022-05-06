@@ -6,14 +6,14 @@
 
     <groupId>xyz.alicedtrh</groupId>
     <artifactId>safetyblanket</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Safetyblanket</name>
 
     <description>A plugin that prevent mobs targeting new players</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>https://alicedtrh.xyz/plugins/safetyblanket</url>
@@ -70,6 +70,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>redempt.dev</id>
+            <url>https://redempt.dev</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -88,6 +92,12 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Redempt</groupId>
+            <artifactId>RedLib</artifactId>
+            <version>6.5.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

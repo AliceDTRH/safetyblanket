@@ -1,0 +1,5 @@
+disableuserblanket player:arg {
+        permission safetyblanket.admin
+        help This lets you forcefully disable the blanket for a user.
+        hook disableuserblanket
+}

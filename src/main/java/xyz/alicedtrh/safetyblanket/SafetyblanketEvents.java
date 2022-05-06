@@ -1,6 +1,8 @@
 package xyz.alicedtrh.safetyblanket;
 
-import org.bukkit.attribute.AttributeInstance;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -16,16 +19,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH;
 import static org.bukkit.event.entity.EntityTargetEvent.TargetReason.*;
+import static xyz.alicedtrh.safetyblanket.SafetyBlanketConfig.*;
 
 
 public class SafetyblanketEvents implements Listener {
     Safetyblanket plugin = Safetyblanket.getPlugin(Safetyblanket.class);
-    /**
-     * The amount of time in milliseconds that a player is considered new to the server.
-     */
-    public static final int NEW_PLAYER_DURATION = 900000;
 
     /**
      * Reasons entities should NOT ignore
@@ -34,11 +33,31 @@ public class SafetyblanketEvents implements Listener {
             TARGET_ATTACKED_ENTITY, TARGET_ATTACKED_OWNER, TARGET_ATTACKED_NEARBY_ENTITY, COLLISION, CUSTOM
     };
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+        if (I_WONT_COMPLAIN_WHEN_EVERYTHING_BREAKS) {
+            return;
+        }
+        if (event.getMessage().equalsIgnoreCase("/reload") || event.getMessage().equalsIgnoreCase("/reload confirm")) {
+            Bukkit.getServer().getOperators().forEach(offlinePlayer -> {
+                Player player = offlinePlayer.getPlayer();
+                if (player != null && player.isOnline() && player.isOp()) {
+                    player.sendMessage(Component.text("[SafetyBlanket] Reload is not supported.", TextColor.color(137, 0, 0)));
+                }
+            });
+        }
+
+
+    }
+
     /**
      * Prevent enemies from targeting players under blanket
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTargetLivingEntityEvent(@NotNull EntityTargetLivingEntityEvent event) {
+        if (!PREVENT_TARGETING) {
+            return;
+        }
         @Nullable LivingEntity target = event.getTarget();
         if (target == null || !target.isValid()) return;
 
@@ -59,6 +78,10 @@ public class SafetyblanketEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTargetEvent(@NotNull EntityTargetEvent event) {
+        if (!PREVENT_TARGETING) {
+            return;
+        }
+
         @Nullable Entity target = event.getTarget();
         if (target == null || !target.isValid()) return;
 
@@ -79,6 +102,10 @@ public class SafetyblanketEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageEvent(@NotNull EntityDamageEvent event) {
+        if (!DECREASE_FALL_DAMAGE) {
+            return;
+        }
+
         if (event.getEntityType() != EntityType.PLAYER) {
             return;
         }
@@ -91,17 +118,9 @@ public class SafetyblanketEvents implements Listener {
             return;
         }
 
-        double playerMaxHealth = 20.0;
-        AttributeInstance playerMaxHealthAttribute = player.getAttribute(GENERIC_MAX_HEALTH);
+        event.setDamage(Math.floor(event.getFinalDamage() * FALL_DAMAGE_REDUCTION_PERCENT));
+        player.sendMessage("You took less fall damage because you're new to the server. Please be careful.");
 
-        if (playerMaxHealthAttribute != null) {
-            playerMaxHealth = playerMaxHealthAttribute.getValue();
-        }
-
-        if (event.getFinalDamage() <= (playerMaxHealth / 2)) {
-            event.setDamage(Math.floor(event.getFinalDamage() * 0.65));
-            player.sendMessage("You took less fall damage because you're new to the server. Please be careful.");
-        }
     }
 
     /**
@@ -109,13 +128,16 @@ public class SafetyblanketEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
-        if(!(event.getEntity() instanceof Monster)) {
+        if (!PREVENT_TARGETING) {
+            return;
+        }
+        if (!(event.getEntity() instanceof Monster)) {
             return;
         }
         Monster monster = (Monster) event.getEntity();
 
-        if(event.getDamager() instanceof Player && isPlayerNew((Player) event.getDamager())) {
-            monster.setTarget((Player)event.getDamager());
+        if (event.getDamager() instanceof Player && isPlayerNew((Player) event.getDamager())) {
+            monster.setTarget((Player) event.getDamager());
         }
 
     }
@@ -148,14 +170,25 @@ public class SafetyblanketEvents implements Listener {
 
         new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS));
         player.getPersistentDataContainer().set(Safetyblanket.HAS_NEW_PLAYER_EFFECTS, PersistentDataType.SHORT, (short) 1);
-        if(!player.hasPlayedBefore()) {
-            player.sendMessage("Enemies won't target you for "+timeUntilRegular(player, TimeUnit.MINUTES)+" minutes, unless you attack them first.");
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS), 0, true, true, false));
+        if (!player.hasPlayedBefore()) {
+            if (PREVENT_TARGETING) {
+                player.sendMessage("Enemies won't target you for " + timeUntilRegular(player, TimeUnit.MINUTES) + " minutes, unless you attack them first.");
+            }
+            if (REGEN_BOOST) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS), 0, true, true, false));
+            }
         }
-        player.sendMessage("You have received a REGENERATION boost because you're new to this server.");
+        if (REGEN_BOOST) {
+            player.sendMessage("You have received a REGENERATION boost because you're new to this server.");
+        }
         player.sendMessage("Use this time to get a base with a bed and a source of food going.");
 
-        player.setAffectsSpawning(false);
+        if (PREVENT_MOB_SPAWNS) {
+            player.setAffectsSpawning(false);
+            if (EARLY_MOB_SPAWN_DISABLE) {
+                new EarlyExpireSafetyBlanketTask(player).runTaskLater(plugin, (long) (timeUntilRegular(player, TimeUnit.TICKS) * EARLY_MOB_SPAWN_DISABLE_PERCENT));
+            }
+        }
     }
 
     /**
