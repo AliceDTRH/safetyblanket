@@ -21,7 +21,7 @@ public final class Safetyblanket extends JavaPlugin {
 
     public static final @NotNull NamespacedKey HAS_NEW_PLAYER_EFFECTS = NamespacedKey.minecraft("xyz.alicedtrh.safetyblanket.newplayer");
 
-    public static @NotNull Logger Log() {
+    public static Logger log() {
         return Safetyblanket.getPlugin(Safetyblanket.class).getLogger();
     }
 

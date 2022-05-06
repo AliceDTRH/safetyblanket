@@ -209,7 +209,7 @@ public class SafetyblanketEvents implements Listener {
             );
         } catch (ArithmeticException e) {
             time_in_millis = 0;
-            Safetyblanket.Log().warning("Overflow when trying to calculate player time: "+e.getLocalizedMessage());
+            Safetyblanket.log().warning("Overflow when trying to calculate player time: " + e.getLocalizedMessage());
         }
 
         // If it's less than (or equal to) zero, the result will always be zero regardless of timeUnit.

@@ -1,7 +1,9 @@
 package xyz.alicedtrh.safetyblanket;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import redempt.redlib.config.annotations.Comment;
 
+@SuppressFBWarnings("MS_SHOULD_BE_FINAL") // This is how the library told me to do it, I don't see any issues with it.
 public class SafetyBlanketConfig {
     @Comment("(c) AliceDTRH 2022")
 

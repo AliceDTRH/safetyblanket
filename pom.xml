@@ -95,6 +95,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.Redempt</groupId>
             <artifactId>RedLib</artifactId>
             <version>6.5.2</version>
