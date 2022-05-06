@@ -23,12 +23,21 @@ import static org.bukkit.event.entity.EntityTargetEvent.TargetReason.*;
 
 public class SafetyblanketEvents implements Listener {
     Safetyblanket plugin = Safetyblanket.getPlugin(Safetyblanket.class);
-    //The amount of time in milliseconds that a player is considered new to the server.
+    /**
+     * The amount of time in milliseconds that a player is considered new to the server.
+     */
     public static final int NEW_PLAYER_DURATION = 900000;
+
+    /**
+     * Reasons entities should NOT ignore
+     */
     final EntityTargetEvent.TargetReason[] reasons = new EntityTargetEvent.TargetReason[]{
             TARGET_ATTACKED_ENTITY, TARGET_ATTACKED_OWNER, TARGET_ATTACKED_NEARBY_ENTITY, COLLISION, CUSTOM
     };
 
+    /**
+     * Prevent enemies from targeting players under blanket
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTargetLivingEntityEvent(@NotNull EntityTargetLivingEntityEvent event) {
         @Nullable LivingEntity target = event.getTarget();
@@ -46,6 +55,9 @@ public class SafetyblanketEvents implements Listener {
         }
     }
 
+    /**
+     * Prevent enemies from targeting players under blanket
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTargetEvent(@NotNull EntityTargetEvent event) {
         @Nullable Entity target = event.getTarget();
@@ -63,6 +75,9 @@ public class SafetyblanketEvents implements Listener {
         }
     }
 
+    /**
+     * Decrease falldamage by 35% if the falldamage isn't too high for players under blanket
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageEvent(@NotNull EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) {
@@ -90,6 +105,9 @@ public class SafetyblanketEvents implements Listener {
         }
     }
 
+    /**
+     * Ensure monsters attack players under blanket, when attacked by said player.
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
         if(!(event.getEntity() instanceof Monster)) {
@@ -103,6 +121,9 @@ public class SafetyblanketEvents implements Listener {
 
     }
 
+    /**
+     * Setup and remove blanket
+     */
     @EventHandler
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
         if (!event.getPlayer().isValid()) {
@@ -120,16 +141,19 @@ public class SafetyblanketEvents implements Listener {
 
     }
 
+    /**
+     * Cover player in blanket
+     */
     private void addSafetyBlanket(@NotNull Player player) {
         new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS));
         player.getPersistentDataContainer().set(Safetyblanket.HAS_NEW_PLAYER_EFFECTS, PersistentDataType.SHORT, (short) 1);
-        player.sendMessage("Enemies won't target you for 15 minutes, unless you attack them first.");
-
-        player.sendMessage("You have "+ timeUntilRegular(player, TimeUnit.MINUTES) +" minutes of protection left.");
         if(!player.hasPlayedBefore()) {
-            player.sendMessage("You have received a REGENERATION boost because you're new to this server. Don't forget to eat!");
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS), 1, true, true, false));
+            player.sendMessage("Enemies won't target you for "+timeUntilRegular(player, TimeUnit.MINUTES)+" minutes, unless you attack them first.");
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS), 0, true, true, false));
         }
+        player.sendMessage("You have received a REGENERATION boost because you're new to this server.");
+        player.sendMessage("Use this time to get a base with a bed and a source of food going.");
+
         player.setAffectsSpawning(false);
     }
 
@@ -166,7 +190,7 @@ public class SafetyblanketEvents implements Listener {
             case SECONDS:
                 return time_in_millis / 1000;
             case TICKS:
-                return (time_in_millis * 1000) * 20;
+                return (time_in_millis / 1000) * 20;
             case MINUTES:
                 return (time_in_millis / 1000) / 60;
 
