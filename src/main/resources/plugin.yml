@@ -1,0 +1,8 @@
+name: Safetyblanket
+version: '${project.version}'
+main: xyz.alicedtrh.safetyblanket.Safetyblanket
+api-version: 1.18
+prefix: SB
+authors: [ AliceDTRH ]
+description: A plugin that prevent mobs targeting new players
+website: https://alicedtrh.xyz/plugins/safetyblanket
