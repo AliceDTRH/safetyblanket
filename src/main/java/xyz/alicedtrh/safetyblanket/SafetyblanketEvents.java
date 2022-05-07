@@ -164,18 +164,31 @@ public class SafetyblanketEvents implements Listener {
 
     /**
      * Cover player in blanket
+     *
+     * @param player Player to give blanket
      */
     private void addSafetyBlanket(@NotNull Player player) {
+        addSafetyBlanket(player, 0);
+    }
+
+    /**
+     * Cover player in blanket
+     *
+     * @param player   Player to give blanket
+     * @param override When supplied, the amount of time the forced blanket should be active for
+     */
+    protected void addSafetyBlanket(@NotNull Player player, int override) {
         Safetyblanket.blankets++;
 
-        new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS));
+        new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS, override));
+
         player.getPersistentDataContainer().set(Safetyblanket.HAS_NEW_PLAYER_EFFECTS, PersistentDataType.SHORT, (short) 1);
         if (!player.hasPlayedBefore()) {
             if (PREVENT_TARGETING) {
-                player.sendMessage("Enemies won't target you for " + timeUntilRegular(player, TimeUnit.MINUTES) + " minutes, unless you attack them first.");
+                player.sendMessage(String.format("Enemies won't target you for %d minutes, unless you attack them first.", timeUntilRegular(player, TimeUnit.MINUTES, override)));
             }
             if (REGEN_BOOST) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS), 0, true, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS, override), 0, true, true, false));
             }
         }
         if (REGEN_BOOST) {
@@ -186,7 +199,7 @@ public class SafetyblanketEvents implements Listener {
         if (PREVENT_MOB_SPAWNS) {
             player.setAffectsSpawning(false);
             if (EARLY_MOB_SPAWN_DISABLE) {
-                new EarlyExpireSafetyBlanketTask(player).runTaskLater(plugin, (long) (timeUntilRegular(player, TimeUnit.TICKS) * EARLY_MOB_SPAWN_DISABLE_PERCENT));
+                new EarlyExpireSafetyBlanketTask(player).runTaskLater(plugin, (long) (timeUntilRegular(player, TimeUnit.TICKS, override) * EARLY_MOB_SPAWN_DISABLE_PERCENT));
             }
         }
     }
@@ -201,7 +214,7 @@ public class SafetyblanketEvents implements Listener {
     /**
      * The amount of time the player has left until they are no longer considered new to the server.
      */
-    private int timeUntilRegular(@NotNull Player player, @NotNull TimeUnit timeUnit) {
+    protected int timeUntilRegular(@NotNull Player player, @NotNull TimeUnit timeUnit, int override) {
         int time_in_millis;
         try {
             time_in_millis = Math.toIntExact(
@@ -212,8 +225,12 @@ public class SafetyblanketEvents implements Listener {
             Safetyblanket.log().warning("Overflow when trying to calculate player time: " + e.getLocalizedMessage());
         }
 
+        if (override > 0) {
+            time_in_millis = override * 20;
+        }
+
         // If it's less than (or equal to) zero, the result will always be zero regardless of timeUnit.
-        if(time_in_millis <= 0) {
+        if (time_in_millis <= 0) {
             return 0;
         }
 

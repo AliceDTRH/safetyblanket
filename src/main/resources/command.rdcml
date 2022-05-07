@@ -1,5 +1,11 @@
-disableuserblanket player:arg {
+disableuserblanket player:player {
         permission safetyblanket.admin
-        help This lets you forcefully disable the blanket for a user.
+        help Remove user blanket. (Restored after rejoin if user is still new)
         hook disableuserblanket
+}
+
+enableuserblanket player:player int:ticks {
+        permission safetyblanket.admin
+        help Give user a temporary test blanket.
+        hook enableuserblanket
 }

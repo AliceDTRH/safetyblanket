@@ -33,7 +33,8 @@ public final class Safetyblanket extends JavaPlugin {
         int pluginId = 15141;
         this.metrics = new Metrics(this, pluginId);
 
-        ConfigManager config = ConfigManager.create(this).target(SafetyBlanketConfig.class).saveDefaults().load();
+        /*ConfigManager config = */
+        ConfigManager.create(this).target(SafetyBlanketConfig.class).saveDefaults().load();
         new CommandParser(this.getResource("command.rdcml")).parse().register("safetyblanket", this);
     }
 
@@ -43,9 +44,16 @@ public final class Safetyblanket extends JavaPlugin {
     }
 
     @CommandHook("disableuserblanket")
-    public void onCommandSafetyBlanket(CommandSender sender, Player arg1) {
-        new ExpireSafetyBlanketTask(arg1).run();
+    public void onCommandDisableSafetyBlanket(CommandSender sender, Player player) {
+        new ExpireSafetyBlanketTask(player).run();
         sender.sendMessage("Forcefully expired user blanket.");
+    }
+
+    @CommandHook("enableuserblanket")
+    public void onCommandEnableSafetyBlanket(CommandSender sender, Player player, Integer ticks) {
+        sender.sendMessage("Warning! This is only used for testing. When the user logs out and back in, the blanket will disappear.");
+        new SafetyblanketEvents().addSafetyBlanket(player, ticks);
+        sender.sendMessage(String.format("%s has been given test blanket.", player.getName()));
     }
 
 }
