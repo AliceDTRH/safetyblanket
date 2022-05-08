@@ -44,7 +44,7 @@ public final class Safetyblanket extends JavaPlugin {
 
             try {
                 GitHubReleaseAPI api = new GitHubReleaseAPI("safetyblanket", "AliceDTRH");
-                int buildsBehind = api.getBuildsBehind(api.getReleaseByTag(this.getDescription().getVersion()));
+                int buildsBehind = api.getBuildsBehind(api.getReleaseByTag("v" + this.getDescription().getVersion()));
                 if (buildsBehind > 0) {
                     getLogger().warning("This version of " + getDescription().getFullName() + " is " + buildsBehind + "versions behind the latest released version. Please consider updating.");
                 }
