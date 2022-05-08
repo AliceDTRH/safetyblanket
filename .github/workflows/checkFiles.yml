@@ -1,0 +1,37 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: File Existence
+        # You may pin to the exact commit or the version.
+        # uses: andstor/file-existence-action@f02338908d150e00a4b8bebc2dad18bd9e5229b0
+        uses: andstor/file-existence-action@v1.1.0
+        with:
+        # Comma separated string with paths to files and directories to check for existence.
+          files: .github, .github/workflows, .github/workflows/checkFiles.yml, .github/workflows/maven.yml
+        # Ignore if a file has upper or lower cases.
+          ignore_case: true # optional
+        # Indicates whether to follow symbolic links.
+          follow_symbolic_links: false # optional, default is true
+        # Makes the Action fail on missing files.
+          allow_failure: true # optional
