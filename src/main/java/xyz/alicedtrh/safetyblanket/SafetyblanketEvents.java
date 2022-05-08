@@ -61,7 +61,7 @@ public class SafetyblanketEvents implements Listener {
         @Nullable LivingEntity target = event.getTarget();
         if (target == null || !target.isValid()) return;
 
-        if (target.getType() != EntityType.PLAYER || !isPlayerNew((Player) target)) {
+        if (target.getType() != EntityType.PLAYER || !target.getPersistentDataContainer().has(Safetyblanket.HAS_NEW_PLAYER_EFFECTS)) {
             return;
         }
 
@@ -85,7 +85,7 @@ public class SafetyblanketEvents implements Listener {
         @Nullable Entity target = event.getTarget();
         if (target == null || !target.isValid()) return;
 
-        if (target.getType() != EntityType.PLAYER || !isPlayerNew((Player) target)) {
+        if (target.getType() != EntityType.PLAYER || !target.getPersistentDataContainer().has(Safetyblanket.HAS_NEW_PLAYER_EFFECTS)) {
             return;
         }
 
@@ -183,7 +183,7 @@ public class SafetyblanketEvents implements Listener {
         new ExpireSafetyBlanketTask(player).runTaskLater(plugin, timeUntilRegular(player, TimeUnit.TICKS, override));
 
         player.getPersistentDataContainer().set(Safetyblanket.HAS_NEW_PLAYER_EFFECTS, PersistentDataType.SHORT, (short) 1);
-        if (!player.hasPlayedBefore()) {
+        if (!player.hasPlayedBefore() || override > 0) {
             if (PREVENT_TARGETING) {
                 player.sendMessage(String.format("Enemies won't target you for %d minutes, unless you attack them first.", timeUntilRegular(player, TimeUnit.MINUTES, override)));
             }
