@@ -5,6 +5,8 @@
 *.ipr
 *.iws
 
+copy-files.sh
+
 # IntelliJ
 out/
 
