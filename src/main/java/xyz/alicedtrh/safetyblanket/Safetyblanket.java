@@ -1,5 +1,6 @@
 package xyz.alicedtrh.safetyblanket;
 
+import lol.hyper.githubreleaseapi.GitHubReleaseAPI;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
@@ -13,6 +14,8 @@ import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.config.ConfigManager;
 
 import java.util.logging.Logger;
+
+import static xyz.alicedtrh.safetyblanket.SafetyBlanketConfig.CHECK_FOR_UPDATES;
 
 
 public final class Safetyblanket extends JavaPlugin {
@@ -36,6 +39,20 @@ public final class Safetyblanket extends JavaPlugin {
         /*ConfigManager config = */
         ConfigManager.create(this).target(SafetyBlanketConfig.class).saveDefaults().load();
         new CommandParser(this.getResource("command.rdcml")).parse().register("safetyblanket", this);
+
+        if (CHECK_FOR_UPDATES) {
+
+            try {
+                GitHubReleaseAPI api = new GitHubReleaseAPI("safetyblanket", "AliceDTRH");
+                int buildsBehind = api.getBuildsBehind(api.getReleaseByTag(this.getDescription().getVersion()));
+                if (buildsBehind > 0) {
+                    getLogger().warning("This version of " + getDescription().getFullName() + " is " + buildsBehind + "versions behind the latest released version. Please consider updating.");
+                }
+            } catch (Exception e) {
+                getLogger().warning("Failed to check for plugin updates. Please check manually. Reason: " + e.getLocalizedMessage());
+            }
+
+        }
     }
 
     @Override

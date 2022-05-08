@@ -41,5 +41,6 @@ public class SafetyBlanketConfig {
     @Comment("Disable the nag about using /reload (Default: false)")
     public static boolean I_WONT_COMPLAIN_WHEN_EVERYTHING_BREAKS = false;
 
-
+    @Comment("Should this plugin check for updates on server start? (Default: True)")
+    public static boolean CHECK_FOR_UPDATES = true;
 }
