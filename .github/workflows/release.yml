@@ -26,6 +26,6 @@ jobs:
     - name: Create release
       uses: softprops/action-gh-release@v1
       with:
-        file: target/safetyblanket-*-SNAPSHOT.jar
+        files: target/safetyblanket-*-SNAPSHOT.jar
         draft: true
         generate_release_notes: true
