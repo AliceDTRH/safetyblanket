@@ -42,11 +42,15 @@ public final class Safetyblanket extends JavaPlugin {
         new CommandParser(this.getResource("command.rdcml")).parse().register("safetyblanket", this);
 
         if (CHECK_FOR_UPDATES) {
+            String currentVersion = String.format("v%s", this.getDescription().getVersion().replace("-SNAPSHOT", ""));
 
             try {
                 GitHubReleaseAPI api = new GitHubReleaseAPI("safetyblanket", "AliceDTRH");
-                int buildsBehind = api.getBuildsBehind(api.getReleaseByTag("v" + this.getDescription().getVersion()));
-                if (buildsBehind > 0) {
+                if (!api.getLatestVersion().equals(api.getReleaseByTag(currentVersion))) {
+                    getLogger().warning(String.format("Current version: %s Latest version: %s", currentVersion, api.getLatestVersion().getTagVersion()));
+                }
+                int buildsBehind = api.getBuildsBehind(api.getReleaseByTag(currentVersion));
+                if (buildsBehind > 1) {
                     getLogger().warning("This version of " + getDescription().getFullName() + " is " + buildsBehind + "versions behind the latest released version. Please consider updating.");
                 }
             } catch (Exception e) {
