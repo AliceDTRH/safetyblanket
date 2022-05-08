@@ -9,3 +9,9 @@ enableuserblanket player:player int:ticks {
         help Give user a temporary test blanket.
         hook enableuserblanket
 }
+
+timeuntilregular player:player {
+        permission safetyblanket.user
+        help Check how many ticks the player has left until they are no longer a new player
+        hook timeuntilregular
+}

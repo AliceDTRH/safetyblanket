@@ -43,4 +43,9 @@ public class SafetyBlanketConfig {
 
     @Comment("Should this plugin check for updates on server start? (Default: True)")
     public static boolean CHECK_FOR_UPDATES = true;
+
+    @Comment("Use manual method to store player age data (Only use this if your users are marked as new on every join)")
+    @Comment("If you use this, all users will be marked as new once and after that the plugin will keep track of player age")
+    @Comment("(Default: false)")
+    public static boolean MANUAL_PLAYER_AGE_STORAGE = false;
 }

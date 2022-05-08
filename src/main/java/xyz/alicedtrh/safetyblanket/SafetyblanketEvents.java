@@ -151,8 +151,12 @@ public class SafetyblanketEvents implements Listener {
             return;
         }
 
+        if (!event.getPlayer().getPersistentDataContainer().has(Safetyblanket.PLAYER_AGE)) {
+            event.getPlayer().getPersistentDataContainer().set(Safetyblanket.PLAYER_AGE, PersistentDataType.LONG, event.getPlayer().getLastLogin());
+        }
+
         if (!isPlayerNew(event.getPlayer())) {
-            if(event.getPlayer().getPersistentDataContainer().has(Safetyblanket.HAS_NEW_PLAYER_EFFECTS)) {
+            if (event.getPlayer().getPersistentDataContainer().has(Safetyblanket.HAS_NEW_PLAYER_EFFECTS)) {
                 new ExpireSafetyBlanketTask(event.getPlayer()).runTask(plugin);
             }
             return;
@@ -208,7 +212,7 @@ public class SafetyblanketEvents implements Listener {
      * Returns whether the player is still considered new to the server.
      */
     private static boolean isPlayerNew(@NotNull Player player) {
-        return (System.currentTimeMillis() - player.getFirstPlayed()) < NEW_PLAYER_DURATION;
+        return (System.currentTimeMillis() - getFirstPlayed(player)) < NEW_PLAYER_DURATION;
     }
 
     /**
@@ -218,7 +222,7 @@ public class SafetyblanketEvents implements Listener {
         int time_in_millis;
         try {
             time_in_millis = Math.toIntExact(
-                    NEW_PLAYER_DURATION - (System.currentTimeMillis() - player.getFirstPlayed())
+                    NEW_PLAYER_DURATION - (System.currentTimeMillis() - getFirstPlayed(player))
             );
         } catch (ArithmeticException e) {
             time_in_millis = 0;
@@ -247,6 +251,13 @@ public class SafetyblanketEvents implements Listener {
 
         }
 
+    }
+
+    protected static long getFirstPlayed(Player player) {
+        if (MANUAL_PLAYER_AGE_STORAGE) {
+            return player.getPersistentDataContainer().getOrDefault(Safetyblanket.PLAYER_AGE, PersistentDataType.LONG, player.getLastLogin());
+        }
+        return player.getFirstPlayed();
     }
 
 

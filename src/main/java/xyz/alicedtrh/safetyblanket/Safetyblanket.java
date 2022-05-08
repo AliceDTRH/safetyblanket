@@ -23,6 +23,7 @@ public final class Safetyblanket extends JavaPlugin {
     static int blankets = 0;
 
     public static final @NotNull NamespacedKey HAS_NEW_PLAYER_EFFECTS = NamespacedKey.minecraft("xyz.alicedtrh.safetyblanket.newplayer");
+    public static final @NotNull NamespacedKey PLAYER_AGE = NamespacedKey.minecraft("xyz.alicedtrh.safetyblanket.playerage");
 
     public static Logger log() {
         return Safetyblanket.getPlugin(Safetyblanket.class).getLogger();
@@ -71,6 +72,11 @@ public final class Safetyblanket extends JavaPlugin {
         sender.sendMessage("Warning! This is only used for testing. When the user logs out and back in, the blanket will disappear.");
         new SafetyblanketEvents().addSafetyBlanket(player, ticks);
         sender.sendMessage(String.format("%s has been given test blanket.", player.getName()));
+    }
+
+    @CommandHook("timeuntilregular")
+    public void onCommandTimeUntilRegular(CommandSender sender, Player player) {
+        sender.sendMessage(String.valueOf(new SafetyblanketEvents().timeUntilRegular(player, TimeUnit.TICKS, 0)));
     }
 
 }
