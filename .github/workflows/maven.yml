@@ -24,3 +24,9 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Upload jar
+    uses: actions/upload-artifact@v3.0.0
+    with:
+     name: Jar file
+     path: target/safetyblanket-*-SNAPSHOT.jar
+     if-no-files-found: warn
