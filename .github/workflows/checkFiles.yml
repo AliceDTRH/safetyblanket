@@ -28,7 +28,7 @@ jobs:
         uses: andstor/file-existence-action@v1.1.0
         with:
         # Comma separated string with paths to files and directories to check for existence.
-          files: .github, .github/workflows, .github/workflows/checkFiles.yml, .github/workflows/maven.yml
+          files: .github, .github/workflows, .github/workflows/checkFiles.yml, .github/workflows/maven.yml, LICENSE, LICENSE-MEDIA, humans.md
         # Ignore if a file has upper or lower cases.
           ignore_case: true # optional
         # Indicates whether to follow symbolic links.
