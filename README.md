@@ -8,17 +8,17 @@
     </a>
 </p>
 
-SafetyBlanket  is a Java Edition plugin that helps your new players get used to your server by giving them various temporary bonuses, or in other words a safety blanket. This is especially helpful for users who are using other devices or are new to the game.
+This plugin helps people get used to your server by giving them various temporary bonuses, or in other words a safety blanket. This is especially useful for users on other devices or new to the game.
 
 ## Features
 - Customizable settings<br>
-    > All parts of the plugin are fully configurable in the configuration file.
+    > All parts of the mod are fully configurable in the configuration file
 - Decreased mob spawning<br>
     > Disable *natural* mob spawning around the player.
 - Prevent mobs from targeting player<br>
-    > Make mobs leave new players alone *(except if the player attacks the mob)*.
+    > Make mobs leave new players alone *(except if they get attacked by the player)*.
 - Decreased fall damage<br>
-    > Reduces the chances of the player dying from fall damage and hhaving to start over.
+    > Help users get used to fall damage without having to start over.
 - Give users regeneration<br>
     > Want to make sure players have time to setup a base? Give them a regeneration boost!
 
