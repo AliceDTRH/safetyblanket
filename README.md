@@ -27,7 +27,7 @@ This plugin helps people get used to your server by giving them various temporar
 - `/enableuserblanket <user> <ticks>`: Give user a forced temporary blanket. This is only for testing and will be removed when they rejoin.
 
 ## Contributing
-Before creating an [issue](https://github.com/AliceDTRH/safetyblanket/issues), please ensure that it hasn't already been reported/suggested You can also take a look at [the contributing guide](https://github.com/AliceDTRH/safetyblanket/blob/main/.github/CONTRIBUTING.md) if you'd like to submit a PR.
+Before creating an [issue](https://github.com/AliceDTRH/safetyblanket/issues), please ensure that it hasn't already been reported/suggested. You can also take a look at [the contributing guide](https://github.com/AliceDTRH/safetyblanket/blob/main/.github/CONTRIBUTING.md) if you'd like to submit a PR.
 
 ## Metrics
 This plugin uses bstats Metrics - the same Metrics system used by all Bukkit implementations.<br>
