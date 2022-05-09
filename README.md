@@ -1,7 +1,7 @@
 <img src=".github/images/safetyblanket_banner.png" alt="Safety blanket banner" />
 <p align="center">
     <a href="https://github.com/AliceDTRH/safetyblanket/releases">
-      <img src="https://img.shields.io/badge/Version-v1.2.4-E899DC?style=flat-square&logo=git&logoColor=white" alt="Version 1.2.4">
+      <img src="https://img.shields.io/github/v/release/alicedtrh/safetyblanket?style=flat-square&logo=git&logoColor=white" alt="Releases">
   	</a>
     <a href="https://bstats.org/plugin/bukkit/SafetyBlanket">
         <img src="https://img.shields.io/bstats/servers/15141?logo=stitcher&logoColor=white&style=flat-square" alt="bStats">
