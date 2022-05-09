@@ -4,7 +4,10 @@
       <img src="https://img.shields.io/badge/Version-v1.2.4-E899DC?style=flat-square&logo=git&logoColor=white" alt="Version 1.2.4">
   	</a>
     <a href="https://bstats.org/plugin/bukkit/SafetyBlanket">
-        <img src="https://img.shields.io/badge/bStats-Click_me-E899DC?style=flat-square&logo=stitcher&logoColor=white" alt="bStats">
+        <img src="https://img.shields.io/bstats/servers/15141?logo=stitcher&logoColor=white&style=flat-square" alt="bStats">
+    </a>
+    <a href="https://github.com/AliceDTRH/safetyblanket/blob/master/humans.md">
+       <img src="https://img.shields.io/badge/Awesome-People-ff69b4?style=flat-square" alt="People">
     </a>
 </p>
 
