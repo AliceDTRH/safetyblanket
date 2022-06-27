@@ -51,7 +51,7 @@ public final class Safetyblanket extends JavaPlugin {
                 }
                 int buildsBehind = api.getBuildsBehind(api.getReleaseByTag(currentVersion));
                 if (buildsBehind > 1) {
-                    getLogger().warning("This version of " + getDescription().getFullName() + " is " + buildsBehind + "versions behind the latest released version. Please consider updating.");
+                    getLogger().warning("This version of " + getDescription().getFullName() + " is " + buildsBehind + " versions behind the latest released version. Please consider updating.");
                 }
             } catch (Exception e) {
                 getLogger().warning("Failed to check for plugin updates. Please check manually. Reason: " + e.getLocalizedMessage());
