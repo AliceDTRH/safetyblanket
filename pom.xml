@@ -6,7 +6,7 @@
 
     <groupId>xyz.alicedtrh</groupId>
     <artifactId>safetyblanket</artifactId>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.2.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Safetyblanket</name>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>com.google.errorprone</groupId>
             <artifactId>error_prone_annotations</artifactId>
-            <version>2.13.1</version>
+            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>lol.hyper</groupId>
             <artifactId>github-release-api</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 </project>
