@@ -192,7 +192,12 @@ public class SafetyblanketEvents implements Listener {
                 player.sendMessage(String.format("Enemies won't target you for %d minutes, unless you attack them first.", timeUntilRegular(player, TimeUnit.MINUTES, override)));
             }
             if (REGEN_BOOST) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, timeUntilRegular(player, TimeUnit.TICKS, override), 0, true, true, false));
+                if (REGEN_BOOST_EFFECTS.isEmpty()) {
+                    throw new IllegalStateException("No potion boost effects setup in the config! No effects will be applied.");
+                }
+                for (PotionEffectType effect : REGEN_BOOST_EFFECTS) {
+                    player.addPotionEffect(new PotionEffect(effect, timeUntilRegular(player, TimeUnit.TICKS, override), 0, true, true, false));
+                }
             }
         }
         if (REGEN_BOOST) {
