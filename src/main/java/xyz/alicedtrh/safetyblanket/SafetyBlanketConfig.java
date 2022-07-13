@@ -1,14 +1,19 @@
 package xyz.alicedtrh.safetyblanket;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.bukkit.potion.PotionEffectType;
 import redempt.redlib.config.annotations.Comment;
+import redempt.redlib.config.annotations.ConfigMappable;
+
+import java.util.List;
 
 @SuppressFBWarnings("MS_SHOULD_BE_FINAL") // This is how the library told me to do it, I don't see any issues with it.
+@ConfigMappable
 public class SafetyBlanketConfig {
     @Comment("(c) AliceDTRH 2022")
 
     @Comment("This is used to keep track of the configuration file version, please don't touch it.")
-    public static String config_version = "1.2.0";
+    public static String config_version = "1.3.0";
 
     @Comment("This is used to debug the plugin, I suggest you don't touch this unless I specifically ask you to.")
     public static boolean DEBUG = false;
@@ -29,8 +34,11 @@ public class SafetyBlanketConfig {
     @Comment("Example: 10 half hearts of damage * 0.65 = 6.5 half hearts of damage")
     public static double FALL_DAMAGE_REDUCTION_PERCENT = 0.65;
 
-    @Comment("Should we give new users an ambient regeneration effect? (Default: true)")
+    @Comment("Should we give new users an ambient potion effect? (Default: true)")
     public static boolean REGEN_BOOST = true;
+
+    @Comment("What effects should be given to new players?")
+    public static List<PotionEffectType> REGEN_BOOST_EFFECTS = List.of(PotionEffectType.REGENERATION);
 
     @Comment("Should we re-enable mob spawns early? (Default: true)")
     public static boolean EARLY_MOB_SPAWN_DISABLE = true;

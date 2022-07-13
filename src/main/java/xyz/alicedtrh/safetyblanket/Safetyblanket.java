@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.CommandParser;
@@ -38,7 +39,8 @@ public final class Safetyblanket extends JavaPlugin {
         this.metrics = new Metrics(this, pluginId);
 
         /*ConfigManager config = */
-        ConfigManager.create(this).target(SafetyBlanketConfig.class).saveDefaults().load();
+        ConfigManager.create(this).addConverter(PotionEffectType.class, PotionEffectType::getByName, PotionEffectType::getName).target(SafetyBlanketConfig.class).saveDefaults().load();
+
         new CommandParser(this.getResource("command.rdcml")).parse().register("safetyblanket", this);
 
         if (CHECK_FOR_UPDATES) {
